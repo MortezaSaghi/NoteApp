@@ -8,8 +8,10 @@ const NoteList = () => {
         day: "numeric",
       };
   return (
-    <>
-      <div className=" border border-stone-400 rounded-lg p-4 mt-4 mx-4 shadow-lg max-w-screen-md lg:mx-auto">
+    <div className="max-w-screen-md lg:mx-auto md:w-2/3">
+      <NoteStatus/>
+      <div className=" border border-stone-400 rounded-lg p-4 mt-4 mx-4 shadow-lg ">
+      
         <div className="flex justify-around p-4">
           <div >
             <div className="font-bold text-xl">Note One</div>
@@ -23,8 +25,21 @@ const NoteList = () => {
         <hr className="bg-slate-600 h-0.5" />
         <div className="text-slate-500">{new Date().toLocaleDateString("en-US", options)}</div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default NoteList;
+
+export const NoteStatus = () => {
+  return (
+    <>
+       <div className="note-status flex justify-around items-center py-2  text-l font-bold text-slate-500">
+              <div >All <span className='bg-slate-100 p-0.5 rounded-md'>5</span></div>
+              <div>Completed <span className='bg-slate-100 p-0.5 rounded-md'>2</span></div>
+              <div>Open <span className='bg-slate-100 p-0.5 rounded-md'>3</span></div>
+        </div>
+    </>
+  )
+}
+
