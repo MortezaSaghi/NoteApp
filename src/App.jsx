@@ -6,6 +6,9 @@ import AddNewNote from "./Components/AddNewNote";
 
 function App() {
   const [notes, setNotes] = useState([]);
+  const [sortBy, setSortBy] = useState("latest");
+
+  //---- Add Note Function
   const addToNotes = (newNote) => {
     setNotes((preState) => [...preState, newNote]);
   };
@@ -15,21 +18,29 @@ function App() {
   };
   // ---- Toggle Compeled Function
   const toggleCompeled = (event) => {
-    const noteId=Number(event.target.value);
+    const noteId = Number(event.target.value);
     setNotes((prevState) =>
       prevState.map((note) =>
-        note.id === noteId ? { ...note, completed: !note.completed } : { ...note }
+        note.id === noteId
+          ? { ...note, completed: !note.completed }
+          : { ...note }
       )
-  );
+    );
   };
+  
   return (
     <div className="bg-slate-200 min-h-screen h-full pb-8">
       <div className="container mx-auto text-center">
-        <AppHeader notes={notes} />
+        <AppHeader
+          notes={notes}
+          sortBy={sortBy}
+          onSort={(e) => setSortBy(e.target.value)}
+        />
         <div className="note-app pt-4 md:flex md:justify-between">
           <AddNewNote onAddToNotes={addToNotes} />
           <NoteList
             notes={notes}
+            sortBy={sortBy}
             onDeleteNote={deleteNote}
             onToggleCompeled={toggleCompeled}
           />

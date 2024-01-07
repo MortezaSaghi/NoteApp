@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
+import Massage from "./Massage";
 
-const NoteList = ({ notes, onDeleteNote, onToggleCompeled }) => {
+const NoteList = ({ notes, onDeleteNote, onToggleCompeled ,sortBy }) => {
+
+  let sortedNotes=notes;
+    if (sortBy==="earliest"){sortedNotes=[...notes].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));}
+    if (sortBy==="latest"){sortedNotes=notes.slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))}
+    if (sortBy==="completed"){sortedNotes=notes.slice().sort((a,b)=>Number(a.completed)-Number(b.completed))}
+
   return (
     <div className="max-w-screen-md lg:mx-auto md:w-2/3">
       <h2 className="font-bold text-slate-600 mb-4 text-xl">Notes</h2>
       <NoteStatus notes={notes} />
-      {notes.map((note) => (
+      {sortedNotes.map((note) => (
         <NoteItem
           key={note.id}
           note={note}
@@ -71,39 +78,30 @@ export const NoteItem = ({ note, onDeleteNote, onToggleCompeled }) => {
 
 // ------------------------------------------------------------------------------------ Status Component
 export const NoteStatus = ({ notes }) => {
-  const [activeTabe, setActiveTab] = useState("all");
-
+  
   const allNotes = notes.length;
   const compeleNotes = notes.filter((note) => note.completed).length;
   const unCompletedNotes = allNotes - compeleNotes;
 
-  if (!allNotes) return <div>No Notes has already been added. </div>;
+  if (!allNotes) return <Massage><div>No Notes has already been added. </div></Massage>;
 
   return (
     <ul className="note-status flex justify-around items-center py-2  text-l font-bold text-slate-500 cursor-pointer">
       <li
-        className={`${
-          activeTabe === "all" ? "border-solid border-b-4 border-blue-300" : ""
-        } transition duration-700 ease-in-out`}
+        className={`transition duration-700 ease-in-out`}
         onClick={() => setActiveTab("all")}
       >
         All<span className="bg-slate-100 p-0.5 rounded-md ">{allNotes}</span>
       </li>
       <li
-        className={`${
-          activeTabe === "completed"
-            ? "border-solid border-b-4 border-blue-300"
-            : ""
-        } transition duration-700 ease-in-out`}
+        className={` transition duration-700 ease-in-out`}
         onClick={() => setActiveTab("completed")}
       >
         Completed
         <span className="bg-slate-100 p-0.5 rounded-md ">{compeleNotes}</span>
       </li>
       <li
-        className={`${
-          activeTabe === "open" ? "border-solid border-b-4 border-blue-300" : ""
-        } transition duration-700 ease-in-out`}
+        className={` transition duration-700 ease-in-out`}
         onClick={() => setActiveTab("open")}
       >
         Open
