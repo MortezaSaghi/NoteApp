@@ -5,29 +5,36 @@ import NoteList from "./Components/NoteList";
 import AddNewNote from "./Components/AddNewNote";
 
 function App() {
-  const [isShowAddNote, setIsShowAddNote] = useState(false);
+  const [notes, setNotes] = useState([]);
+  const addToNotes = (newNote) => {
+    setNotes((preState) => [...preState, newNote]);
+  };
+  // ---- Delete Function
+  const deleteNote = (id) => {
+    setNotes((preState) => preState.filter((note) => note.id !== id));
+  };
+  // ---- Toggle Compeled Function
+  const toggleCompeled = (event) => {
+    const noteId=Number(event.target.value);
+    setNotes((prevState) =>
+      prevState.map((note) =>
+        note.id === noteId ? { ...note, completed: !note.completed } : { ...note }
+      )
+  );
+  };
   return (
-    <div className="bg-slate-200 h-screen">
-      <div className="container mx-auto text-center ">
-      <AppHeader />
-      <div className="note-app pt-4 md:flex md:justify-between">
-        <div className=" md:w-1/3">
-          <AddNewNote isShowAddNote={isShowAddNote} />
-          <div className="add-new-note py-10 flex justify-center md:hidden">
-            <button
-              className={` ${
-                isShowAddNote ? " bg-red-400" : "bg-slate-600"
-              }  text-slate-200 px-8 py-2 rounded-md hover:bg-slate-400 hover:text-slate-100 `}
-              onClick={() => setIsShowAddNote((preveState) => !preveState)}
-            >
-              {isShowAddNote ? "Close Add Note" : "Add New Note"}
-            </button>
-          </div>
+    <div className="bg-slate-200 min-h-screen h-full pb-8">
+      <div className="container mx-auto text-center">
+        <AppHeader notes={notes} />
+        <div className="note-app pt-4 md:flex md:justify-between">
+          <AddNewNote onAddToNotes={addToNotes} />
+          <NoteList
+            notes={notes}
+            onDeleteNote={deleteNote}
+            onToggleCompeled={toggleCompeled}
+          />
         </div>
-
-        <NoteList/>
       </div>
-    </div>
     </div>
   );
 }
