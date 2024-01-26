@@ -1,33 +1,30 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import "./App.css";
+//--- import Componnets
 import AppHeader from "./Components/AppHeader";
 import NoteList from "./Components/NoteList";
 import AddNewNote from "./Components/AddNewNote";
+// ---- import Notes Reducer
+import notesReducer from "./reducers/noteReducer";
 
 function App() {
-  const [notes, setNotes] = useState([]);
   const [sortBy, setSortBy] = useState("latest");
+  const [notes, dispatch] = useReducer(notesReducer, []);
 
   //---- Add Note Function
   const addToNotes = (newNote) => {
-    setNotes((preState) => [...preState, newNote]);
+    dispatch({ type: "ADD", payload: newNote });
   };
   // ---- Delete Function
   const deleteNote = (id) => {
-    setNotes((preState) => preState.filter((note) => note.id !== id));
+    dispatch({ type: "DELETE", payload: id });
   };
   // ---- Toggle Compeled Function
   const toggleCompeled = (event) => {
     const noteId = Number(event.target.value);
-    setNotes((prevState) =>
-      prevState.map((note) =>
-        note.id === noteId
-          ? { ...note, completed: !note.completed }
-          : { ...note }
-      )
-    );
+    dispatch({ type: "COMPLETE", payload: noteId });
   };
-  
+
   return (
     <div className="bg-slate-200 min-h-screen h-full pb-8">
       <div className="container mx-auto text-center">

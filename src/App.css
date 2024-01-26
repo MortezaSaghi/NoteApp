@@ -916,7 +916,35 @@ video {
   color: rgb(241 245 249 / var(--tw-text-opacity));
 }
 
+@media (min-width: 200px) {
+  .min-\[200px\]\:flex-col {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 281px) {
+  .min-\[281px\]\:flex {
+    display: flex;
+  }
+}
+
+@media (min-width: 320px) {
+  .min-\[320px\]\:flex-col {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 380px) {
+  .min-\[380px\]\:flex {
+    display: flex;
+  }
+}
+
 @media (min-width: 640px) {
+  .sm\:flex {
+    display: flex;
+  }
+
   .sm\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
