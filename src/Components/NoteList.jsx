@@ -1,25 +1,32 @@
-import React, { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import Massage from "./Massage";
+import { useNotes } from "../context/noteContext";
 
-const NoteList = ({ notes, onDeleteNote, onToggleCompeled ,sortBy }) => {
-
-  let sortedNotes=notes;
-    if (sortBy==="earliest"){sortedNotes=[...notes].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));}
-    if (sortBy==="latest"){sortedNotes=notes.slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))}
-    if (sortBy==="completed"){sortedNotes=notes.slice().sort((a,b)=>Number(a.completed)-Number(b.completed))}
+const NoteList = ({ sortBy }) => {
+  const { notes } = useNotes();
+  let sortedNotes = notes;
+  if (sortBy === "earliest") {
+    sortedNotes = [...notes].sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+    );
+  }
+  if (sortBy === "latest") {
+    sortedNotes = notes
+      .slice()
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+  if (sortBy === "completed") {
+    sortedNotes = notes
+      .slice()
+      .sort((a, b) => Number(a.completed) - Number(b.completed));
+  }
 
   return (
     <div className="max-w-screen-md lg:mx-auto md:w-2/3">
       <h2 className="font-bold text-slate-600 mb-4 text-xl">Notes</h2>
-      <NoteStatus notes={notes} />
+      <NoteStatus />
       {sortedNotes.map((note) => (
-        <NoteItem
-          key={note.id}
-          note={note}
-          onDeleteNote={onDeleteNote}
-          onToggleCompeled={onToggleCompeled}
-        />
+        <NoteItem key={note.id} note={note} />
       ))}
     </div>
   );
@@ -27,11 +34,10 @@ const NoteList = ({ notes, onDeleteNote, onToggleCompeled ,sortBy }) => {
 
 export default NoteList;
 
-
-
 // ------------------------------------------------------------------------------------ Note Item Component
 
-export const NoteItem = ({ note, onDeleteNote, onToggleCompeled }) => {
+export const NoteItem = ({ note }) => {
+  const { dispatch } = useNotes();
   const options = {
     year: "numeric",
     month: "long",
@@ -55,7 +61,7 @@ export const NoteItem = ({ note, onDeleteNote, onToggleCompeled }) => {
           <div>
             <RiDeleteBinLine
               className="text-2xl text-red-400 cursor-pointer"
-              onClick={() => onDeleteNote(note.id)}
+              onClick={() => dispatch({ type: "DELETE", payload: note.id })}
             />
           </div>
           <input
@@ -64,7 +70,9 @@ export const NoteItem = ({ note, onDeleteNote, onToggleCompeled }) => {
             id={note.id}
             value={note.id}
             checked={note.completed}
-            onChange={onToggleCompeled}
+            onChange={(e) =>
+              dispatch({ type: "COMPLETE", payload: Number(e.target.value) })
+            }
           />
         </div>
       </div>
@@ -77,33 +85,29 @@ export const NoteItem = ({ note, onDeleteNote, onToggleCompeled }) => {
 };
 
 // ------------------------------------------------------------------------------------ Status Component
-export const NoteStatus = ({ notes }) => {
-  
+export const NoteStatus = () => {
+  const { notes } = useNotes();
   const allNotes = notes.length;
   const compeleNotes = notes.filter((note) => note.completed).length;
   const unCompletedNotes = allNotes - compeleNotes;
 
-  if (!allNotes) return <Massage><div>No Notes has already been added. </div></Massage>;
+  if (!allNotes)
+    return (
+      <Massage>
+        <div>No Notes has already been added. </div>
+      </Massage>
+    );
 
   return (
     <ul className="note-status flex justify-around items-center py-2  text-l font-bold text-slate-500 cursor-pointer">
-      <li
-        className={`transition duration-700 ease-in-out`}
-        onClick={() => setActiveTab("all")}
-      >
+      <li>
         All<span className="bg-slate-100 p-0.5 rounded-md ">{allNotes}</span>
       </li>
-      <li
-        className={` transition duration-700 ease-in-out`}
-        onClick={() => setActiveTab("completed")}
-      >
+      <li>
         Completed
         <span className="bg-slate-100 p-0.5 rounded-md ">{compeleNotes}</span>
       </li>
-      <li
-        className={` transition duration-700 ease-in-out`}
-        onClick={() => setActiveTab("open")}
-      >
+      <li>
         Open
         <span className="bg-slate-100 p-0.5 rounded-md ">
           {unCompletedNotes}

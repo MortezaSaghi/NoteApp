@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNotes } from "../context/noteContext";
 
-const AddNewNote = ({ onAddToNotes }) => {
+const AddNewNote = () => {
+
+  const {dispatch} = useNotes();
   // ---- States
   const [isShowAddNote, setIsShowAddNote] = useState(false);
   const [newNote, setNewNote] = useState("");
@@ -18,7 +21,7 @@ const AddNewNote = ({ onAddToNotes }) => {
       completed: false,
       createdAt: Date.now(),
     };
-    onAddToNotes(NewNote);
+    dispatch({ type: "ADD", payload: NewNote });
     setNewNote("");
     setNewDesc("");
     // console.log(NewNote);
