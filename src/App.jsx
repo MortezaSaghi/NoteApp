@@ -5,7 +5,7 @@ import AppHeader from "./Components/AppHeader";
 import NoteList from "./Components/NoteList";
 import AddNewNote from "./Components/AddNewNote";
 // ---- import Notes Reducer
-import notesReducer from "./reducers/noteReducer";
+import {notesReducer} from "./context/noteContext"
 import { NotesProvider } from "./context/noteContext";
 
 function App() {

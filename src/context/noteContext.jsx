@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer } from "react";
 
 // ------- Reducer
 
-function notesReducer(notes, { type, payload }) {
+export function notesReducer(notes, { type, payload }) {
   switch (type) {
     case "ADD": {
       return [...notes, payload];
@@ -39,6 +39,6 @@ export function NotesProvider({ children }) {
 
 export function useNotes() {
   const context = useContext(NotesContext);
-  if (context === undefined) throw new Error("errorrrr");
+  if (context === undefined) throw new Error("ThemeContext was used outside of ThemeProvider");
   return context;
 }
