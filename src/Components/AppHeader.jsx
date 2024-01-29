@@ -1,9 +1,12 @@
+import { useNotes } from "../context/noteContext";
 
-const AppHeader = ({ notes ,sortBy, onSort }) => {
-  
+const AppHeader = ({ sortBy, onSort }) => {
+  const notes = useNotes();
   return (
     <div className=" min-[380px]:flex justify-around  py-8 border-solid border-b-2 border-slate-50 mb-8 lg:mb-14">
-      <h1 className="text-2xl sm:text-4xl font-bold">My Notes ({notes.length})</h1>
+      <h1 className="text-2xl sm:text-4xl font-bold">
+        My Notes ({notes.length})
+      </h1>
       <select
         value={sortBy}
         onChange={onSort}

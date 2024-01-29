@@ -22,23 +22,34 @@ export function notesReducer(notes, { type, payload }) {
   }
 }
 
-// ------ Notes Context
+// ------ Notes Context Providers
 
-const NotesContext = createContext();
+const NotesContext = createContext(null);
+const NotesDispatchContext = createContext(null);
 
 export function NotesProvider({ children }) {
   const [notes, dispatch] = useReducer(notesReducer, []);
   return (
-    <NotesContext.Provider value={{ notes, dispatch }}>
-      {children}
+    <NotesContext.Provider value={notes}>
+      <NotesDispatchContext.Provider value={dispatch}>{children}</NotesDispatchContext.Provider>
     </NotesContext.Provider>
   );
 }
 
-// ------ useNotes Hook
-
+// -------- useNotes Hooks
+// --- 1. Notes Hook
 export function useNotes() {
   const context = useContext(NotesContext);
-  if (context === undefined) throw new Error("ThemeContext was used outside of ThemeProvider");
+  if (context === undefined)
+    throw new Error("NotesContext was used outside of NotesProvider");
+  return context;
+}
+//---- 2. Dispatch Hook
+export function useNotesDispatch() {
+  const context = useContext(NotesDispatchContext);
+  if (context === undefined)
+    throw new Error(
+      "NoteDispatchContext was used outside of NotesDispatchProvider"
+    );
   return context;
 }

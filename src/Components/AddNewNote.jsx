@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useNotes } from "../context/noteContext";
+import { useNotesDispatch } from "../context/noteContext";
 
 const AddNewNote = () => {
-
-  const {dispatch} = useNotes();
+  const dispatch = useNotesDispatch();
   // ---- States
   const [isShowAddNote, setIsShowAddNote] = useState(false);
   const [newNote, setNewNote] = useState("");
@@ -32,7 +31,9 @@ const AddNewNote = () => {
   return (
     <div className=" md:w-1/3 md:max-w-96">
       <form
-        className={`flex flex-col gap-4 p-4  ${!isShowAddNote ? "hidden" : ""} md:flex`}
+        className={`flex flex-col gap-4 p-4  ${
+          !isShowAddNote ? "hidden" : ""
+        } md:flex`}
         onSubmit={addHandler}
       >
         <h3 className="font-bold text-slate-600 mb-4">Add New Notes</h3>
@@ -72,7 +73,9 @@ const ShowButton = ({ isShowAddNote, toggelShow }) => {
     <div className="add-new-note py-10 flex justify-center md:hidden">
       <button
         className={` ${
-          isShowAddNote ? " bg-red-400 hover:bg-red-500" : "bg-slate-600 hover:bg-blue-500"
+          isShowAddNote
+            ? " bg-red-400 hover:bg-red-500"
+            : "bg-slate-600 hover:bg-blue-500"
         }  text-slate-200 px-8 py-2 rounded-md  hover:text-slate-100 `}
         onClick={toggelShow}
       >

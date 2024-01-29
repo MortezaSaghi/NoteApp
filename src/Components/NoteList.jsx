@@ -1,9 +1,9 @@
 import { RiDeleteBinLine } from "react-icons/ri";
 import Massage from "./Massage";
-import { useNotes } from "../context/noteContext";
+import { useNotes, useNotesDispatch } from "../context/noteContext";
 
 const NoteList = ({ sortBy }) => {
-  const { notes } = useNotes();
+  const notes = useNotes();
   let sortedNotes = notes;
   if (sortBy === "earliest") {
     sortedNotes = [...notes].sort(
@@ -37,7 +37,7 @@ export default NoteList;
 // ------------------------------------------------------------------------------------ Note Item Component
 
 export const NoteItem = ({ note }) => {
-  const { dispatch } = useNotes();
+  const dispatch = useNotesDispatch();
   const options = {
     year: "numeric",
     month: "long",
@@ -86,7 +86,7 @@ export const NoteItem = ({ note }) => {
 
 // ------------------------------------------------------------------------------------ Status Component
 export const NoteStatus = () => {
-  const { notes } = useNotes();
+  const notes = useNotes();
   const allNotes = notes.length;
   const compeleNotes = notes.filter((note) => note.completed).length;
   const unCompletedNotes = allNotes - compeleNotes;
